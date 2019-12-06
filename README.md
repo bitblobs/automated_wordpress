@@ -6,7 +6,7 @@ Este Playbook implementa de forma simples o WordPress, Interface Web do NGINX e 
 
 1. Faça git clone deste repositório em seu localhost.
 2. Edite o arquivo hosts (com o seu servidor, obviamente).
-3. No caminho 'automated_wordpress/roles/defaults/main.yml' altere o '{{ server_hostname }}' para o IP do seu servidor ou DNS.  
+3. No caminho 'roles/NGINX/defaults/main.yml' altere o '{{ server_hostname }}' para o IP do seu servidor ou DNS.  
 
 E rode o Playbook assim:
 
