@@ -6,3 +6,10 @@
   yum:
     name: epel-release
     state: latest
+
+- name: Install basic packages
+  package:
+    name: ['vim','wget','unzip','curl','git']
+    state: present
+
+    

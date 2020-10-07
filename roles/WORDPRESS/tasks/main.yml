@@ -8,7 +8,7 @@
     owner: nginx
     group: nginx
     recurse: yes
-
+#
 - name: RECURSSIVE PERMISSION FOR WORDPRESS
   command: sudo chown -R nginx:nginx /var/www/html/blog/wordpress
   notify: DISABLED SELinux

@@ -1,0 +1,89 @@
+- name: COPY php.ini CONFIGURATION
+  template: src=php.ini dest=/etc/php.ini
+
+- name: CREATE MAGENTO DATABASE
+  mysql_db:
+    name: magentodb
+    state: present
+
+- name: CREATE MAGENTO USER
+  mysql_user:
+    name: magentouser
+    password: Magento123@
+    priv: magentodb.*:ALL
+    host: "localhost"
+    state: present
+
+- name: DOWNLOAD COMPOSER
+  get_url:
+    url: https://getcomposer.org/installer
+    dest: /tmp/installer
+
+- name: INSTALL COMPOSER
+  shell: cat /tmp/installer | php -- --install-dir=/usr/bin
+  args:
+    creates: /usr/bin/composer
+
+- name: RENAME composer.phar TO composer
+  shell: mv /usr/bin/composer.phar /usr/bin/composer
+  args:
+    creates: /usr/bin/composer
+
+- name: MAKE COMPOSER EXECUTABLE
+  file: 
+    path: /usr/bin/composer
+    mode: a+x
+    state: file
+
+- name: DOWNLOAD MAGENTO
+  get_url:
+    url: https://github.com/magento/magento2/archive/2.1.zip
+    dest: /var/www/html
+
+- name: CREATING DIRECTORY IF THERE IS NO
+  file:
+    path: /var/www/html/magento2
+    state: directory
+    mode: '755'
+    owner: nginx
+    group: nginx
+    recurse: yes
+
+- name: EXTRACTING FILE MAGENTO
+  unarchive:
+    src: /var/www/html/2.1.zip
+    dest: /var/www/html/magento2
+    remote_src: yes
+
+- name: Install magento 2 from CLI
+  shell: php bin/magento setup:install \
+    --cleanup-database \
+    --backend-frontname=adminlogin \
+    --key="biY8vdWx4w8KV5Q59380Fejy36l6ssUb" \
+    --session-save=files \
+    --db-host="localhost" \
+    --db-user="magentouser" \
+    --db-password="Magento123@"" \
+    --db-name="magentodb" \
+    --use-rewrites=1 \
+    --admin-user=adminuser \
+    --admin-password=admin123@ \
+    --admin-email=admin@newmagento.com \
+    --admin-firstname=admin \
+    --admin-lastname=user \
+    --language="en_US" \
+    --currency="USD" \
+    --base-url="http://loja-barbosa.barbosateam.tk" \
+    --base-url-secure="http://loja-barbosa.barbosateam.tk"
+  args:
+    chdir: /var/www/html/magento2
+  when: mage2_installed.stat.exists == False
+
+- name: PERMISSION
+  shell: chmod 700 /var/www/magento2/app/etc
+
+- name: PERMISSION RECURSSIVE
+  shell: chown -R nginx:nginx /var/www/html/magento2
+
+- neme: RESTART NGINX
+  notify: restart nginx

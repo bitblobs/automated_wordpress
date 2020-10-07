@@ -1,7 +1,17 @@
 ---
 # tasks file for .CONF_FOR_NGINX
-- name: COPY NGINX config file
-  template: src=wordpress.conf dest=/etc/nginx/conf.d/wordpress.conf
+- name: COPY NGINX config file for WORDPRESS
+  template: src=blog.conf dest=/etc/nginx/conf.d/blog.conf
+
+- name: COPY NGINX config file for STATIC_WEBSITE
+  template: src=site.conf dest=/etc/nginx/conf.d/site.conf
+
+- name: COPY NGINX config file for REVERSE_PROXY
+  template: src=site.conf dest=/etc/nginx/conf.d/tomcat.conf
+
+- name: COPY NGINX config file for MAGENTO
+  template: src=site.conf dest=/etc/nginx/conf.d/tomcat.conf
 
 - name: RESTART NGINX
   shell: sudo systemctl restart nginx
+

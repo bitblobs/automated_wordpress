@@ -1,0 +1,3 @@
+# handlers file for MAGENTO
+- name: restart nginx
+  service: name=nginx state=restarted

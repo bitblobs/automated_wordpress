@@ -8,8 +8,10 @@
     roles:
     - UPDATE
     - NGINX
-    - WGET
+    - CONF_FOR_NGINX
+    - STATIC_WEBSITE
+    - TOMCAT
     - MYSQL
     - PHP
     - WORDPRESS
-    - CONF_FOR_NGINX
+    - MAGENTO

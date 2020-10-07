@@ -1,0 +1,56 @@
+- name: INSTALL JAVA
+  yum:
+    name: java-1.7.0-openjdk-devel
+    state: present
+
+- name: ADD TOMCAT GROUP
+  group:
+    name: tomcat
+
+- name: ADD TOMCAT USER
+  user:
+    name: tomcat
+    group: tomcat
+    home: /usr/share/tomcat
+    createhome: no
+    system: yes
+
+- name: DOWNLOAD TOMCAT
+  get_url:
+    url: https://www.apache.org/dist/tomcat/tomcat-8/v8.5.49/bin/apache-tomcat-8.5.49.tar.gz
+    dest: /tmp
+
+- name: EXTRACTING FILE TOMCAT
+  unarchive:
+    src: /tmp/apache-tomcat-8.5.49.tar.gz
+    dest: /opt/tomcat
+    remote_src: yes
+
+- name: PERMISSION OF ARCHIVE
+  shell: sudo useradd -M -s /bin/nologin -g tomcat -d /opt/tomcat tomcat
+
+- name: PROPERTY OF ARCHIVE
+  shell: sudo chgrp -R tomcat /opt/tomcat
+
+- name: PROPERTY OF ARCHIVE
+  shell: sudo chmod -R g+r conf
+
+- name: PROPERTY OF ARCHIVE
+  shell: sudo chmod g+x conf
+
+- name: Copy tomcat service file
+  template:
+    src: templates/tomcat.service.j2
+    dest: /etc/systemd/system/tomcat.service
+  when: ansible_service_mgr == "systemd"
+
+- name: START AND ENABLE TOMCAT
+  service:
+    daemon_reload: yes
+    name: tomcat
+    state: started
+    enabled: yes
+  when: ansible_service_mgr == "systemd"
+
+- name: RESTART SERVICE
+  notify: restart tomcat

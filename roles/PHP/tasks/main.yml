@@ -73,3 +73,4 @@
     - name: CREATE /VAR/RUN/PHP > SOCK
       shell: rm -rf /var/run/php && mkdir /var/run/php && chmod 755 /var/run/php
       notify: restart php-fpm
+

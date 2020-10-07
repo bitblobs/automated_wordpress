@@ -1,0 +1,13 @@
+---
+# tasks file for STATIC_WEBSITE
+- name: CREATING DIRECTORY IF THERE IS NO
+  file:
+    path: /var/www/html/site
+    state: directory
+    mode: '755'
+    owner: nginx
+    group: nginx
+    recurse: yes
+
+- name: COPY WORDPRESS CONFIGURATION FILE
+  template: src=index.html dest=/var/www/html/site
