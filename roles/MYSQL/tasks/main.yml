@@ -16,7 +16,7 @@
     state: present
 
 - name: CREATE MYSQL CONFIGURATION FILE
-  template: src=my.cnf.j2 dest=/etc/my.cnf.d/my.cnf
+  template: src=my.cnf.j2 dest=/etc/my.cnf
   notify: restart mariadb
 
 - name: CREATE MARIADB LOGFILE
