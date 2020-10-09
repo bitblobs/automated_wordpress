@@ -74,9 +74,9 @@
     - name: START Mysqld
       shell: sudo systemctl start mariadb
 
-    - name: Criando pasta PHP
-      command: rm -rf /var/run/php && mkdir /var/run/php && chmod 755 /var/run/php
-      notify: restart php-fpm
+ #   - name: Criando pasta PHP
+ #     command: rm -rf /var/run/php && mkdir /var/run/php && chmod 755 /var/run/php
+ #     notify: restart php-fpm
     
 #                - name: DISABLE DEFAULT POOL
 #                      command: mv /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.disabled creates=/etc/php-fpm.d/www.disabled
