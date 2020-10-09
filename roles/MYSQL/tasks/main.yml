@@ -2,11 +2,21 @@
 # tasks file for MYSQL
 - name: INSTALL MYSQL
   yum:
+    name: mariadb
+    state: present
+
+- name: INSTALL MYSQL
+  yum:
     name: mariadb-server
-    state: latest
+    state: present
+
+- name: INSTALL MYSQL
+  yum:
+    name: python-pip
+    state: present
 
 - name: CREATE MYSQL CONFIGURATION FILE
-  template: src=my.cnf.j2 dest=/etc/my.cnf
+  template: src=my.cnf.j2 dest=/etc/my.cnf.d/my.cnf
   notify: restart mariadb
 
 - name: CREATE MARIADB LOGFILE

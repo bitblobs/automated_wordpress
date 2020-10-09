@@ -1,6 +1,6 @@
 ---
 # handlers file for TOMCAT
 - name: restart tomcat
-  service:
-    name: tomcat
+  service: 
+    name: tomcat 
     state: restarted

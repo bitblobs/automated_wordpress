@@ -7,10 +7,10 @@
   template: src=site.conf dest=/etc/nginx/conf.d/site.conf
 
 - name: COPY NGINX config file for REVERSE_PROXY
-  template: src=site.conf dest=/etc/nginx/conf.d/tomcat.conf
+  template: src=tomcat.conf dest=/etc/nginx/conf.d/tomcat.conf
 
 - name: COPY NGINX config file for MAGENTO
-  template: src=site.conf dest=/etc/nginx/conf.d/tomcat.conf
+  template: src=magento.conf dest=/etc/nginx/conf.d/magento.conf
 
 - name: RESTART NGINX
   shell: sudo systemctl restart nginx

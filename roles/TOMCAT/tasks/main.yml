@@ -11,36 +11,66 @@
   user:
     name: tomcat
     group: tomcat
-    home: /usr/share/tomcat
+    home: /opt/tomcat
     createhome: no
     system: yes
 
 - name: DOWNLOAD TOMCAT
   get_url:
-    url: https://www.apache.org/dist/tomcat/tomcat-8/v8.5.49/bin/apache-tomcat-8.5.49.tar.gz
+    url: https://www.apache.org/dist/tomcat/tomcat-8/v8.5.58/bin/apache-tomcat-8.5.58.tar.gz
     dest: /tmp
+
+- name: CREATING DIRECTORY IF THERE IS NO
+  file:
+    path: /opt/tomcat
+    state: directory
+
+- name: CREATING DIRECTORY IF THERE IS NO
+  file:
+    path: /opt/tomcat/bin
+    state: directory
+    mode: '755'
+    owner: tomcat
+    group: tomcat
+    recurse: yes
 
 - name: EXTRACTING FILE TOMCAT
   unarchive:
-    src: /tmp/apache-tomcat-8.5.49.tar.gz
+    src: /tmp/apache-tomcat-8.5.58.tar.gz
     dest: /opt/tomcat
+    owner: tomcat
+    group: tomcat
+    remote_src: yes
+#    creates: /opt/tomcat/apache-tomcat-8.5.58/bin
     remote_src: yes
 
+#- name: PERMISSION OF ARCHIVE
+#  command: cp . -R /opt/tomcat/apache-tomcat-8.5.58 /opt/tomcat
+
 - name: PERMISSION OF ARCHIVE
-  shell: sudo useradd -M -s /bin/nologin -g tomcat -d /opt/tomcat tomcat
+  command: sudo chmod -R g+r /opt/tomcat/conf
 
-- name: PROPERTY OF ARCHIVE
-  shell: sudo chgrp -R tomcat /opt/tomcat
+- name: PERMISSION OF ARCHIVE
+  command: sudo chmod g+x /opt/tomcat/conf
 
-- name: PROPERTY OF ARCHIVE
-  shell: sudo chmod -R g+r conf
+- name: PERMISSION OF ARCHIVE
+  command: sudo chown -R tomcat /opt/tomcat/webapps/ /opt/tomcat/work/ /opt/tomcat/temp/ /opt/tomcat/logs/
 
-- name: PROPERTY OF ARCHIVE
-  shell: sudo chmod g+x conf
+#- name: PERMISSION OF ARCHIVE
+#  shell: sudo useradd -M -s /bin/nologin -g tomcat -d /opt/tomcat tomcat
+
+#- name: PROPERTY OF ARCHIVE
+#  shell: sudo chgrp -R tomcat /opt/tomcat
+
+#- name: PROPERTY OF ARCHIVE
+#  shell: sudo chmod -R g+r conf
+
+#- name: PROPERTY OF ARCHIVE
+#  shell: sudo chmod g+x conf
 
 - name: Copy tomcat service file
   template:
-    src: templates/tomcat.service.j2
+    src: templates/tomcat.service
     dest: /etc/systemd/system/tomcat.service
   when: ansible_service_mgr == "systemd"
 
@@ -52,5 +82,5 @@
     enabled: yes
   when: ansible_service_mgr == "systemd"
 
-- name: RESTART SERVICE
-  notify: restart tomcat
+#- name: restart tomcat
+#  notify: restart tomcat

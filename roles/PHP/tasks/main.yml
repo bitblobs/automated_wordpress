@@ -1,21 +1,17 @@
----
-# tasks file for PHP
-    - name: INSTALL remi 7
-      yum:
-        name: http://rpms.remirepo.net/enterprise/remi-release-7.rpm
-        state: latest
+    - name: Add repository 'epel-release'
+      yum: name=epel-release state=installed
 
-    - name: ENABLE remi 7
-      shell: sudo yum-config-manager --enable remi-php73
+    - name: Add repository 'remi-repo'
+      command: rpm -ih http://rpms.famillecollet.com/enterprise/remi-release-7.rpm creates=/etc/yum.repos.d/remi.repo
 
-    - name: INSTALL php7.3
+    - name: INSTALL php7
       yum:
-        name: php
+        name: php70
         state: latest
 
     - name: INSTALL PHP
       yum:
-        name: php-fpm
+        name: php70-php-fpm
         state: latest
 
     - name: INSTALL [php-common]
@@ -30,22 +26,42 @@
 
     - name: INSTALL [php-gd]
       yum:
-        name: php-gd
+        name: php70-php-gd
         state: latest
 
     - name: INSTALL [php-xml]
       yum:
-        name: php-xml
+        name: php70-php-xml
         state: latest
 
-    - name: INSTALL [php-mbstring]
+    - name: INSTALL [php-pdo]
       yum:
-        name: php-mbstring
+        name: php70-php-pdo
+        state: latest
+
+    - name: INSTALL [php-zip]
+      yum:
+        name: php70-php-zip
+        state: latest
+
+    - name: INSTALL [php-intl]
+      yum:
+        name: php70-php-intl
         state: latest
 
     - name: INSTALL [php-mcrypt]
       yum:
-        name: php-mcrypt
+        name: php70-php-mcrypt
+        state: latest
+
+    - name: INSTALL [php-soap]
+      yum:
+        name: php70-php-soap
+        state: latest
+
+    - name: INSTALL [php-pdo_mysql]
+      yum:
+        name: php70-php-pdo_mysql
         state: latest
 
     - name: RESTART Daeler
@@ -58,19 +74,18 @@
     - name: START Mysqld
       shell: sudo systemctl start mariadb
 
-    #- name: Criando pasta PHP
-    #  command: rm -rf /var/run/php && mkdir /var/run/php && chmod 755 /var/run/php
-    #  notify: restart php-fpm
-
-    - name: DISABLE DEFAULT POOL
-      command: mv /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.disabled creates=/etc/php-fpm.d/www.disabled
+    - name: Criando pasta PHP
+      command: rm -rf /var/run/php && mkdir /var/run/php && chmod 755 /var/run/php
       notify: restart php-fpm
-
-    - name: COPY php-fpm CONFIGURATION
-      template: src=www.conf dest=/etc/php-fpm.d/
-      notify: restart php-fpm
-
-    - name: CREATE /VAR/RUN/PHP > SOCK
-      shell: rm -rf /var/run/php && mkdir /var/run/php && chmod 755 /var/run/php
-      notify: restart php-fpm
+    
+#                - name: DISABLE DEFAULT POOL
+#                      command: mv /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.disabled creates=/etc/php-fpm.d/www.disabled
+#                            notify: restart php-fpm
+#    
+#                                - name: COPY php-fpm CONFIGURATION
+#                                      template: src=www.conf dest=/etc/php-fpm.d/
+#                                            notify: restart php-fpm
+#                                             #   - name: CREATE /VAR/RUN/PHP > SOCK
+#                                              #     command: rm -rf /var/run/php && mkdir /var/run/php && chmod 755 /var/run/php
+#                                               #     notify: restart php-fpm
 

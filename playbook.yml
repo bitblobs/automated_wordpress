@@ -1,5 +1,5 @@
 ---
-  - hosts: centos
+  - hosts: localhost
     #sudo: True
     user: centos
     tasks:
@@ -8,10 +8,10 @@
     roles:
     - UPDATE
     - NGINX
-    - CONF_FOR_NGINX
     - STATIC_WEBSITE
     - TOMCAT
     - MYSQL
     - PHP
     - WORDPRESS
     - MAGENTO
+    - CONF_FOR_NGINX

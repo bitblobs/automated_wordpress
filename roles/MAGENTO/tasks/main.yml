@@ -1,6 +1,17 @@
 - name: COPY php.ini CONFIGURATION
   template: src=php.ini dest=/etc/php.ini
 
+- name: INSTALL PYTHON-PIP
+  yum:
+    name: python-pip
+    state: latest
+
+- name: MAKE SURE PYMYSQL IS PRESENT
+  become: true # needed if the other tasks are not played as root
+  pip:
+    name: pymysql
+    state: present
+
 - name: CREATE MAGENTO DATABASE
   mysql_db:
     name: magentodb
@@ -51,19 +62,22 @@
 
 - name: EXTRACTING FILE MAGENTO
   unarchive:
-    src: /var/www/html/2.1.zip
-    dest: /var/www/html/magento2
+    src: /var/www/html/magento2-2.1.zip
+    dest: /var/www/html/
     remote_src: yes
 
+#- name: COPY ARCHIVES
+#  command: mv /var/www/html/magento2/magento2-2.1 /var/www/html/magento2
+
 - name: Install magento 2 from CLI
-  shell: php bin/magento setup:install \
+  shell: php /var/www/html/magento2-2.1/bin setup:install \
     --cleanup-database \
     --backend-frontname=adminlogin \
     --key="biY8vdWx4w8KV5Q59380Fejy36l6ssUb" \
     --session-save=files \
     --db-host="localhost" \
     --db-user="magentouser" \
-    --db-password="Magento123@"" \
+    --db-password="Magento123@" \
     --db-name="magentodb" \
     --use-rewrites=1 \
     --admin-user=adminuser \
@@ -77,13 +91,13 @@
     --base-url-secure="http://loja-barbosa.barbosateam.tk"
   args:
     chdir: /var/www/html/magento2
-  when: mage2_installed.stat.exists == False
+#  when: mage2_installed.stat.exists == False
 
 - name: PERMISSION
-  shell: chmod 700 /var/www/magento2/app/etc
+  shell: chmod 700 /var/www/html/magento2-2.1/app/etc
 
 - name: PERMISSION RECURSSIVE
-  shell: chown -R nginx:nginx /var/www/html/magento2
+  shell: chown -R nginx:nginx /var/www/html/magento2-2.1/
 
-- neme: RESTART NGINX
-  notify: restart nginx
+#- name: RESTART NGINX
+#  notify: restart nginx
