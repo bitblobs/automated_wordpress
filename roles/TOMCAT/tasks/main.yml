@@ -22,12 +22,12 @@
 
 - name: CREATING DIRECTORY IF THERE IS NO
   file:
-    path: /opt/tomcat
+    path: /opt/tomcat/apache-tomcat-8.5.58
     state: directory
 
 - name: CREATING DIRECTORY IF THERE IS NO
   file:
-    path: /opt/tomcat/bin
+    path: /opt/tomcat/apache-tomcat-8.5.58/bin
     state: directory
     mode: '755'
     owner: tomcat
@@ -48,13 +48,13 @@
 #  command: cp . -R /opt/tomcat/apache-tomcat-8.5.58 /opt/tomcat
 
 - name: PERMISSION OF ARCHIVE
-  command: sudo chmod -R g+r /opt/tomcat/conf
+  command: sudo chmod -R g+r /opt/tomcat/apache-tomcat-8.5.58/conf
 
 - name: PERMISSION OF ARCHIVE
-  command: sudo chmod g+x /opt/tomcat/conf
+  command: sudo chmod g+x /opt/tomcat/apache-tomcat-8.5.58/conf
 
 - name: PERMISSION OF ARCHIVE
-  command: sudo chown -R tomcat /opt/tomcat/webapps/ /opt/tomcat/work/ /opt/tomcat/temp/ /opt/tomcat/logs/
+  command: sudo chown -R tomcat /opt/tomcat/apache-tomcat-8.5.58/webapps/ /opt/tomcat/apache-tomcat-8.5.58/work/ /opt/tomcat/apache-tomcat-8.5.58/temp/ /opt/tomcat/apache-tomcat-8.5.58/logs/
 
 #- name: PERMISSION OF ARCHIVE
 #  shell: sudo useradd -M -s /bin/nologin -g tomcat -d /opt/tomcat tomcat
