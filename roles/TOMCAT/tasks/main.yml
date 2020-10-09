@@ -11,7 +11,7 @@
   user:
     name: tomcat
     group: tomcat
-    home: /opt/tomcat
+    home: /opt/tomcat/apache-tomcat-8.5.58
     createhome: no
     system: yes
 
