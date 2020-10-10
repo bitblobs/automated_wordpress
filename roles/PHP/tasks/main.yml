@@ -1,68 +1,85 @@
     - name: Add repository 'epel-release'
       yum: name=epel-release state=installed
 
-    - name: Add repository 'remi-repo'
-      command: rpm -ih http://rpms.famillecollet.com/enterprise/remi-release-7.rpm creates=/etc/yum.repos.d/remi.repo
+#    - name: Add repository 'remi-repo'
+#      command: rpm -ih http://rpms.famillecollet.com/enterprise/remi-release-7.rpm creates=/etc/yum.repos.d/remi.repo
+
+    - name: "Adicionando repositório"
+      yum:
+         name: http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+         state: latest
+
+    - name: "Habilitante repositório"
+      command: yum-config-manager --enable remi-php72
 
     - name: INSTALL php7
       yum:
-        name: php70
-        state: latest
+        name: php
+        state: present
 
     - name: INSTALL PHP
       yum:
-        name: php70-php-fpm
-        state: latest
+        name: php-fpm
+        state: present
 
     - name: INSTALL [php-common]
       yum:
         name: php-common
-        state: latest
+        state: present
+
+    - name: INSTALL [php-fpm]
+      yum:
+        name: php-fpm
+        state: present
 
     - name: INSTALL [php-mysql]
       yum:
         name: php-mysql
-        state: latest
-
+        
     - name: INSTALL [php-gd]
       yum:
-        name: php70-php-gd
-        state: latest
+        name: php-gd
+        state: present
 
     - name: INSTALL [php-xml]
       yum:
-        name: php70-php-xml
-        state: latest
+        name: php-xml
+        state: present
 
     - name: INSTALL [php-pdo]
       yum:
-        name: php70-php-pdo
-        state: latest
+        name: php-pdo
+        state: present
 
     - name: INSTALL [php-zip]
       yum:
-        name: php70-php-zip
-        state: latest
+        name: php-zip
+        state: present
 
     - name: INSTALL [php-intl]
       yum:
-        name: php70-php-intl
-        state: latest
+        name: php-intl
+        state: present
 
     - name: INSTALL [php-mcrypt]
       yum:
-        name: php70-php-mcrypt
-        state: latest
+        name: php-mcrypt
+        state: present
 
     - name: INSTALL [php-soap]
       yum:
-        name: php70-php-soap
-        state: latest
-
+        name: php-soap
+        state: present
+        
     - name: INSTALL [php-pdo_mysql]
       yum:
-        name: php70-php-pdo_mysql
-        state: latest
+        name: php-pdo_mysql
+        state: present
+
+    - name: INSTALL [php-cli]
+      yum:
+        name: php-cli
+        state: present
 
     - name: RESTART Daeler
       service:
@@ -77,7 +94,7 @@
 #    - name: Criando pasta PHP
 #      command: rm -rf /var/run/php && mkdir /var/run/php && chmod 755 /var/run/php
 #      notify: restart php-fpm
-
+#
     - name: CREATING DIRECTORY IF THERE IS NO
       file:
         path: /var/run/php
@@ -86,18 +103,15 @@
         owner: nginx
         group: nginx
         recurse: yes
-      
+        
     - name: CREATE PHP-FPM.SOCK
       file: path=/var/run/php/php-fpm.sock state=touch owner=nginx group=nginx mode=0775
-    
+
     - name: DISABLE DEFAULT POOL
       command: mv /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.disabled creates=/etc/php-fpm.d/www.disabled
       notify: restart php-fpm
-    
+
     - name: COPY php-fpm CONFIGURATION
       template: src=www.conf dest=/etc/php-fpm.d/
-      notify: restart php-fpm
-#                                             #   - name: CREATE /VAR/RUN/PHP > SOCK
-#                                              #     command: rm -rf /var/run/php && mkdir /var/run/php && chmod 755 /var/run/php
-#                                               #     notify: restart php-fpm
-
+        
+    
