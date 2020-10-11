@@ -90,7 +90,7 @@
     --base-url="http://loja-barbosa.barbosateam.tk" \
     --base-url-secure="http://loja-barbosa.barbosateam.tk"
   args:
-    chdir: /var/www/html/magento2
+    chdir: /var/www/html/magento2-2.1
 #  when: mage2_installed.stat.exists == False
 
 - name: PERMISSION
