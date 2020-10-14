@@ -20,12 +20,12 @@
     url: https://www.apache.org/dist/tomcat/tomcat-8/v8.5.58/bin/apache-tomcat-8.5.58.tar.gz
     dest: /tmp
 
-- name: CREATING DIRECTORY IF THERE IS NO
+- name: CREATING DIRECTORY 'tomcat' IF THERE IS NO
   file:
     path: /opt/tomcat/apache-tomcat-8.5.58
     state: directory
 
-- name: CREATING DIRECTORY IF THERE IS NO
+- name: CREATING DIRECTORY 'bin' IF THERE IS NO
   file:
     path: /opt/tomcat/apache-tomcat-8.5.58/bin
     state: directory
@@ -47,13 +47,13 @@
 #- name: PERMISSION OF ARCHIVE
 #  command: cp . -R /opt/tomcat/apache-tomcat-8.5.58 /opt/tomcat
 
-- name: PERMISSION OF ARCHIVE
+- name: PERMISSION OF ARCHIVE 'conf'
   command: sudo chmod -R g+r /opt/tomcat/apache-tomcat-8.5.58/conf
 
-- name: PERMISSION OF ARCHIVE
+- name: PERMISSION OF ARCHIVE 'conf > g+x'
   command: sudo chmod g+x /opt/tomcat/apache-tomcat-8.5.58/conf
 
-- name: PERMISSION OF ARCHIVE
+- name: PERMISSION OF ARCHIVE 'webapps' 'work' 'temp' 'logs'
   command: sudo chown -R tomcat /opt/tomcat/apache-tomcat-8.5.58/webapps/ /opt/tomcat/apache-tomcat-8.5.58/work/ /opt/tomcat/apache-tomcat-8.5.58/temp/ /opt/tomcat/apache-tomcat-8.5.58/logs/
 
 #- name: PERMISSION OF ARCHIVE
@@ -68,7 +68,7 @@
 #- name: PROPERTY OF ARCHIVE
 #  shell: sudo chmod g+x conf
 
-- name: Copy tomcat service file
+- name: COPY TOMCAT SERVICE FILE
   template:
     src: templates/tomcat.service
     dest: /etc/systemd/system/tomcat.service
