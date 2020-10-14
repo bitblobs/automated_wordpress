@@ -1,6 +1,6 @@
 ---
 # tasks file for WORDPRESS
-- name: CREATING DIRECTORY IF THERE IS NO
+- name: CREATING DIRECTORY 'wordpress' IF THERE IS NO
   file:
     path: /var/www/html/blog/wordpress
     state: directory
