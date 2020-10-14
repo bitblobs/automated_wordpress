@@ -1,19 +1,22 @@
 ---
 # tasks file for MYSQL
-- name: INSTALL MYSQL
-  yum:
-    name: mariadb
-    state: present
+- name: Install MySQL repo
+  yum: name=http://dev.mysql.com/get/mysql57-community-release-el7-8.noarch.rpm state=present
 
-- name: INSTALL MYSQL
+- name: INSTALL MYSQL-CLIENT
   yum:
-    name: mariadb-server
-    state: present
+    name: mysql-community-client
+    state: latest
 
-- name: INSTALL MYSQL
+- name: INSTALL MYSQL-SERVER
+  yum:
+    name: mysql-community-server
+    state: latest
+
+- name: INSTALL PYTHON-PIP
   yum:
     name: python-pip
-    state: present
+    state: latest
 
 #- name: CREATE MYSQL CONFIGURATION FILE
 #  template: src=my.cnf.j2 dest=/etc/my.cnf
@@ -22,5 +25,5 @@
 #- name: CREATE MARIADB LOGFILE
 #  file: path=/var/log/mysqld.log state=touch owner=mysql group=mysql mode=0775
 
-- name: START MARIADB SERVICE
-  service: name=mariadb state=started enabled=yes
+- name: START MYSQL SERVICE
+  service: name=mysqld state=started enabled=yes
