@@ -65,38 +65,48 @@
     src: /var/www/html/magento2-2.1.zip
     dest: /var/www/html/
     remote_src: yes
+    
+- name: SET FILE/DIRECTORY PERMISSIONS
+  shell: find . -type f -exec chmod 644 {} \; && find . -type d -exec chmod 755 {} \; && find ./var -type d -exec chmod 777 {} \; && find ./pub/media -type d -exec chmod 777 {} \; && find ./pub/static -type d -exec chmod 777 {} \;
+  args:
+    chdir: /var/www/html/magento2-2.1
+
+- name: COMPOSER INSTALL
+  shell: composer install -v
+  args:
+    chdir: /var/www/html/magento2-2.1
 
 #- name: COPY ARCHIVES
 #  command: mv /var/www/html/magento2/magento2-2.1 /var/www/html/magento2
 
-- name: Install magento 2 from CLI
-  shell: php /var/www/html/magento2-2.1/bin setup:install \
-    --cleanup-database \
+- name: INSTALL MAGENTO 2 FROM CLI
+  shell: php /var/www/html/magento2-2.1/bin/magento setup:install \
     --backend-frontname=adminlogin \
     --key="biY8vdWx4w8KV5Q59380Fejy36l6ssUb" \
-    --session-save=files \
     --db-host="localhost" \
+    --db-name="magentodb" \
     --db-user="magentouser" \
     --db-password="Magento123@" \
-    --db-name="magentodb" \
+    --language="en_US" \
+    --currency="USD" \
+    --timezone="America/Sao_Paulo" \
     --use-rewrites=1 \
+    --use-secure=0 \
+    --base-url="http://loja-barbosa.barbosateam.tk" \
     --admin-user=adminuser \
     --admin-password=admin123@ \
     --admin-email=admin@newmagento.com \
     --admin-firstname=admin \
     --admin-lastname=user \
-    --language="en_US" \
-    --currency="USD" \
-    --base-url="http://loja-barbosa.barbosateam.tk" \
-    --base-url-secure="http://loja-barbosa.barbosateam.tk"
+    --cleanup-database
   args:
     chdir: /var/www/html/magento2-2.1
 #  when: mage2_installed.stat.exists == False
 
-- name: PERMISSION
+- name: PERMISSION OF APP/ETC
   shell: chmod 700 /var/www/html/magento2-2.1/app/etc
 
-- name: PERMISSION RECURSSIVE
+- name: PERMISSION RECURSSIVE OF NGINX-MAGENTO
   shell: chown -R nginx:nginx /var/www/html/magento2-2.1/
 
 #- name: RESTART NGINX
