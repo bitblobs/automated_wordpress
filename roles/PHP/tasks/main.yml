@@ -1,23 +1,23 @@
-    - name: Add repository 'epel-release'
+    - name: ADD REPOSITORY 'EPEL-RELEASE'
       yum: name=epel-release state=installed
 
-#    - name: Add repository 'remi-repo'
+#    - name: ADD REPOSITORY 'PHP 7'
 #      command: rpm -ih http://rpms.famillecollet.com/enterprise/remi-release-7.rpm creates=/etc/yum.repos.d/remi.repo
 
-    - name: "Adicionando repositório"
+    - name: ADD REPOSITORY 'PHP 7'
       yum:
          name: http://rpms.remirepo.net/enterprise/remi-release-7.rpm
          state: latest
 
     - name: "Habilitante repositório"
-      command: yum-config-manager --enable remi-php72
+      command: yum-config-manager --enable remi-php71
 
     - name: INSTALL php7
       yum:
         name: php
         state: present
 
-    - name: INSTALL PHP
+    - name: INSTALL PHP-FPM
       yum:
         name: php-fpm
         state: present
@@ -25,11 +25,6 @@
     - name: INSTALL [php-common]
       yum:
         name: php-common
-        state: present
-
-    - name: INSTALL [php-fpm]
-      yum:
-        name: php-fpm
         state: present
 
     - name: INSTALL [php-mysql]
@@ -80,6 +75,11 @@
       yum:
         name: php-cli
         state: present
+        
+    - name: INSTALL [php-mbstring]
+      yum:
+        name: php-mbstring
+        state: present
 
     - name: RESTART Daeler
       service:
@@ -89,7 +89,7 @@
       shell: sudo systemctl start nginx
 
     - name: START Mysqld
-      shell: sudo systemctl start mariadb
+      shell: sudo systemctl start mysqld
 
 #    - name: Criando pasta PHP
 #      command: rm -rf /var/run/php && mkdir /var/run/php && chmod 755 /var/run/php
@@ -104,8 +104,8 @@
         group: nginx
         recurse: yes
         
-    - name: CREATE PHP-FPM.SOCK
-      file: path=/var/run/php/php-fpm.sock state=touch owner=nginx group=nginx mode=0775
+#    - name: CREATE PHP-FPM.SOCK
+#      file: path=/var/run/php/php-fpm.sock state=touch owner=nginx group=nginx mode=0775
 
     - name: DISABLE DEFAULT POOL
       command: mv /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.disabled creates=/etc/php-fpm.d/www.disabled
@@ -113,5 +113,6 @@
 
     - name: COPY php-fpm CONFIGURATION
       template: src=www.conf dest=/etc/php-fpm.d/
-        
-    
+      
+    - name: PERMISSION OF SESSION
+      shell: chown -R nginx:nginx /var/lib/php/session/
